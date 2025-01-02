@@ -8,6 +8,8 @@
 
 因为不满于[nvim-cmp](https://github.com/hrsh7th/nvim-cmp)在 rime-ls 下潦草的性能，转向[blink-cmp](https://github.com/Saghen/blink.cmp) 。因为 blink-cmp 的配置几乎是从头再来 (尤其是考虑到我许久未更新的 LazyVim), 因此直接重写配置文件，完全支持新一代 neovim 配置。
 
+> blink 相对于 nvim-cmp 有很多独特的好处，首先是运行速度确实很快，高速输入 (尤其是高速输入 rime_ls) 的时候不会出现卡顿和画屏现象，这是我选择它的主要原因。但是很明显，这个还是一个全新的方案，存在诸多问题。一个比较严重的问题是 copilot 会爆炸。不过问题也不是特别大，已经满足日常使用，最重要的是快呀，生活质量大大改善。
+
 ![UI](./readme_fig/new_workspace.png)
 
 ![UI](./readme_fig/new_full_workspace.png)
@@ -23,10 +25,6 @@
 * 基于 LSP [rime-ls](https://github.com/wlh320/rime-ls) 的中文输入法，自动匹配数学公式 (基于 [treesitter](https://github.com/nvim-treesitter/nvim-treesitter)) 转换为英文输入法，在英文输入环境中匹配数学公式并不切换输入法，实现中 - 英 - $\LaTeX$ 的完全集成，并通过合理的配置优化文件编辑速度 (具体而言，只在 insert 模式进行 lsp 触发)，最大限度保持了浏览文件过程中的跳转速度;利用相同原理配置了 markdown 的中文输入与 $\LaTeX$ 环境识别;
 
 * 利用 [autoformat](https://github.com/huacnlee/autocorrect) 实现中文标点自动格式化 (对 latex 与 markdown 开启，在应用端修正了上游 formatter 的添加空行问题)，利用 [jieba](https://github.com/fxsjy/jieba) 实现中文分词，部分使用 hack 的方式解决了上游以及自动格式化的一些问题;
-
-* 迁移到不会卡顿的[blink-cmp](https://github.com/Saghen/blink.cmp) 中进行编辑，仍然有很多问题 (比如 LSP 的共用问题，在打开其他 lsp 之后会出现冲突），但因为性能实在过于好，`features` 分支将会始终维护 blink-cmp 相关的版本，而 `mai` 分支则将专注与原来[nvim-cmp](https://github.com/hrsh7th/nvim-cmp)的集成;
-
-> blink 相对于 nvim-cmp 有很多独特的好处，首先是运行速度确实很快，高速输入 (尤其是高速输入 rime_ls) 的时候不会出现卡顿和画屏现象，这是我选择它的主要原因。但是很明显，这个还是一个全新的方案，存在诸多问题。一个比较严重的问题是 copilot 会爆炸，而且和 texlab 等 lsp 在中文输入时常常冲突。不过问题也不是特别大，已经满足日常使用，最重要的是快呀，生活质量大大改善。
 
 ![中文输入法](./readme_fig/cn_input.png)
 
