@@ -1,0 +1,12 @@
+{
+  "extras": [
+    "lazyvim.plugins.extras.ai.copilot",
+    "lazyvim.plugins.extras.editor.aerial",
+    "lazyvim.plugins.extras.editor.telescope",
+    "lazyvim.plugins.extras.lang.tex"
+  ],
+  "news": {
+    "NEWS.md": "10960"
+  },
+  "version": 7
+}
