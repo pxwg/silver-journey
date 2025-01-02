@@ -2,13 +2,17 @@
 
 ![dashboard](./readme_fig/new_dashboard.png)
 
-这是本人自用的 Neovim 配置，fork 自小马的 Neovim [配置](https://github.com/YinFengQi/nvim-config-based-on-lazyvim)。因为不满于 Neovim 原生的中文输入支持 (需要频繁切换输入法，且例如 `jj` `jk` 等的字母快捷键不能在中文输入法被激活时使用)，进行了基于 [rime](https://github.com/rime) 的中文输入法集成，实现了中文数学笔记的无输入法切换输入，目前中文输入经短期测试可以流畅使用，已被用于课堂笔记 (虽然现在很多都是用英文写的了) 、论文和实验报告 (这个必须得中文写) 的书写中。
+这是本人自用的 Neovim 配置，改变自本人原本的配置[MACOS_nvim_config](https://github.com/pxwg/MACOS_nvim_config)。
+
+因为不满于 Neovim 原生的中文输入支持 (需要频繁切换输入法，且例如 `jj` `jk` 等的字母快捷键不能在中文输入法被激活时使用)，进行了基于 [rime](https://github.com/rime) 的中文输入法集成，实现了中文数学笔记的无输入法切换输入，目前中文输入经短期测试可以流畅使用，已被用于课堂笔记 (虽然现在很多都是用英文写的了) 、论文和实验报告 (这个必须得中文写) 的书写中。
+
+因为不满于[nvim-cmp](https://github.com/hrsh7th/nvim-cmp)在 rime-ls 下潦草的性能，转向[blink-cmp](https://github.com/Saghen/blink.cmp) 。因为 blink-cmp 的配置几乎是从头再来 (尤其是考虑到我许久未更新的 LazyVim), 因此直接重写配置文件，完全支持新一代 neovim 配置。
 
 ![UI](./readme_fig/new_workspace.png)
 
 ![UI](./readme_fig/new_full_workspace.png)
 
-*基本配置思路*：不出 BUG 就不动，出了 BUG 就修复，出了 BUG 修复不了就换插件 (这句话是 Copilot 写的)。*基本要求*：流畅书写第一位，能耗第二位，能不用 gui/gpu 加速就不用，尽可能保持终端的快速流畅低功耗 (这句话是我写的，目前在 M3 MacBook Pro 上可以使用约 15 小时，如果打开 gpu 加速大约可以用 6 小时)。
+* 基本配置思路：专注速度，多语言输入与性能。不满足于简单的解决方案，而是尽可能面向未来组织功能设计;
 
 部分联动配置使用 apple script 实现，目前没有跨平台方案。Linux 下 inkscape 联动可以参考[castel 的绘图配置](https://github.com/gillescastel/inkscape-figures) 与 [castel 的图片管理配置](https://github.com/gillescastel/inkscape-shortcut-manager)。
 
@@ -84,8 +88,6 @@ print("hello world")
 
 ## 🤔 TODO
 
-* fork 并为本配置改写 [tdf](https://github.com/itsjunetime/tdf) , 实现鼠标点击的 pdf 位置读取，并使用 synctex 实现精确到*段落*的反向搜索 (本任务为长线作战，并不期待短期内实现，因为学习 rust 本身足够困难，作为物理系学生并没有多少时间)。因此一个替代方案是提交 issue，但我并不确定是否会因此在主分支上得到解决方案 (目前通过 Hammerspoon 利用模拟鼠标交互的 Hack 方式暂时解决，满足基本需求✅);
-
 * 格式化 git-hunk，但逻辑不是简单地 conform git hunk 对应行的代码 (这会造成一些错误的格式化），而是先全部格式化，再将对应的格式化内容应用到 hunk 上，这样可以避免一些错误的格式化并且保护之前的 commit;
 
 * 优化 snack 中 dashboard 的 logo 变成自己画的图;
@@ -93,8 +95,6 @@ print("hello world")
 * 加入浮动终端，实现 CopilotChat.nvim 的浮动窗口功能 (没错，类似 cursor)，目标是在浮动窗口输入指令，直接在 cursor 下方补全结果 (怎么看都像是大号版的 nvim-cmp, 区别在于它的阅读范围可以达到整个 buffer，而不是只有当前行);
 
 * 实现 tdf 与 WezTerm 的终端预览联动，现在还需要依赖 kitty 展示 PDF，但 kitty 的颜值不是很高，还是更喜欢 WezTerm;
-
-* 集成终端浏览器调用，实现 readme 的全终端书写 (这个好无聊呀，暂时不想搞);
 
 * 增加 boostrapping 脚本，实现自动利用 Homebrew 安装依赖。
 
