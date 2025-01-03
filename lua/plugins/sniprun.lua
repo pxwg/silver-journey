@@ -12,7 +12,7 @@ return {
       borders = "rounded",
       display = { "Api" },
       -- display = { "TempFloatingWindow", "LongTempFloatingWindow", "Api" },
-      -- repl_enable = { "Mathematica_original" },
+      repl_enable = { "Mathematica_original" },
       interpreter_options = {
         Mathematica_original = {
           use_javagraphics_if_contains = { "Plot" }, -- a pattern that need <<JavaGraphics
