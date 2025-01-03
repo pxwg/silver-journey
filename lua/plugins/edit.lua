@@ -103,6 +103,20 @@ return {
         set_hl("BlinkCmpKind" .. kind, { link = "CmpItemKind" .. kind or "BlinkCmpKind" })
       end
 
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuOpen",
+        callback = function()
+          require("copilot.suggestion").dismiss()
+          vim.b.copilot_suggestion_hidden = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuClose",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = false
+        end,
+      })
       require("blink.cmp").setup({
         keymap = {
           preset = "none",
@@ -214,15 +228,6 @@ return {
               module = "blink-cmp-copilot",
               score_offset = 100,
               async = true,
-              transform_items = function(_, items)
-                local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-                local kind_idx = #CompletionItemKind + 1
-                CompletionItemKind[kind_idx] = "Copilot"
-                for _, item in ipairs(items) do
-                  item.kind = kind_idx
-                end
-                return items
-              end,
             },
             ripgrep = {
               module = "blink-ripgrep",
@@ -249,27 +254,6 @@ return {
                 fallback_to_regex_highlighting = true,
               },
             },
-            -- copilot = {
-            --   name = "copilot", -- IMPORTANT: use the same name as you would for nvim-cmp
-            --   module = "blink.compat.source",
-            --   async = true,
-            --   -- all blink.cmp source config options work as normal:
-            --   score_offset = 100,
-            --
-            --   transform_items = function(_, items)
-            --     local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-            --     local kind_idx = #CompletionItemKind + 1
-            --     CompletionItemKind[kind_idx] = "Copilot"
-            --     for _, item in ipairs(items) do
-            --       item.kind = kind_idx
-            --     end
-            --     return items
-            --   end,
-            --   -- this table is passed directly to the proxied completion source
-            --   -- as the `option` field in nvim-cmp's source config
-            --   --
-            --   -- this is NOT the same as the opts in a plugin's lazy.nvim spec
-            -- },
           },
         },
       })
