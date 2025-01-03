@@ -231,11 +231,12 @@ vim.api.nvim_create_autocmd("FileType", {
     -- This requires Telescope to be installed.
     vim.keymap.set("n", "<leader>d", ":Telescope lsp_document_symbols<CR>", { noremap = true, silent = true })
 
-    vim.notify("Wolfram LSP started", vim.log.levels.INFO, { title = "Wolfram LSP" })
-
+    -- vim.notify("Wolfram LSP started", vim.log.levels.INFO, { title = "Wolfram LSP" })
+    require("util.lang-mma").check_wolfarm()
     vim.lsp.buf_attach_client(0, client)
   end,
 })
+_G.notify_state = false
 
 require("util.formatter")
 
@@ -271,4 +272,16 @@ require("telescope").setup({
       },
     },
   },
+})
+
+-- auto delate untitled file
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.api.nvim_buf_get_name(buf) == "Untitled" then
+        vim.api.nvim_buf_delete(buf, { force = true })
+      end
+    end
+  end,
 })

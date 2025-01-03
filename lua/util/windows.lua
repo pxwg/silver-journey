@@ -81,6 +81,12 @@ M.create_floating_window = function()
     local options = { "Yes", "No" }
     vim.ui.select(options, { prompt = "Save?" }, function(choice)
       if choice == "Yes" then
+        local clients = vim.lsp.get_clients()
+        for client_id, client in pairs(clients) do
+          if client.name == "wolfram-lsp" then
+            vim.lsp.buf_detach_client(0, client_id)
+          end
+        end
         SaveAndClose()
       else
         vim.api.nvim_command("q")
