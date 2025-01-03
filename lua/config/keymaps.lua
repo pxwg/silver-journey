@@ -244,3 +244,50 @@ vim.keymap.set({ "n", "v" }, "<leader>ct", require("stay-centered").toggle, { de
 keymap.set("n", "<f6>", function()
   require("util.windows").create_floating_window()
 end, { noremap = true, silent = true, desc = "Mathematica Calculation" })
+
+local telescope = require("telescope.builtin")
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+
+local function open_selected_telescope(prompt_bufnr)
+  local selection = action_state.get_selected_entry()
+  actions.close(prompt_bufnr)
+  vim.fn.system({ "open", selection.path })
+end
+
+local function search_selected_word()
+  local prev = vim.fn.expand("<cword>")
+  local word = prev .. ".nb"
+
+  local search_dir = "/Library/Wolfram/Documentation/14.1/zh-hans-cn/Documentation/ChineseSimplified/"
+
+  telescope.find_files({
+    prompt_title = "Search for " .. word,
+    cwd = search_dir,
+    search_dirs = { search_dir },
+    default_text = word,
+  })
+end
+
+local function search_and_open_selected_word()
+  local prev = vim.fn.expand("<cword>")
+  local word = prev .. ".nb"
+  local confpath = vim.fn.stdpath("config")
+  local script = confpath .. "/fzf_mmadoc.sh"
+
+  print("Executing script: " .. script .. " with word: " .. word)
+  local result = vim.fn.system(script .. " " .. word)
+  print(result)
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "mma",
+  callback = function()
+    keymap.set({ "v", "n" }, "<leader>fd", function()
+      search_and_open_selected_word()
+    end, { noremap = true, silent = true, desc = "Go Mathematica Definition" })
+    keymap.set({ "v", "n" }, "<leader>fD", function()
+      search_selected_word()
+    end, { noremap = true, silent = true, desc = "Search Mathematica Definition" })
+  end,
+})
