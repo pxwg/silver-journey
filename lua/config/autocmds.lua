@@ -255,3 +255,20 @@ if vim.g.started_by_firenvim then
     command = "set filetype=markdown",
   })
 end
+
+local actions = require("telescope.actions")
+local action_state = require("telescope.actions.state")
+
+require("telescope").setup({
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-o>"] = function(prompt_bufnr)
+          local selection = action_state.get_selected_entry()
+          actions.close(prompt_bufnr)
+          vim.fn.system({ "open", selection.path })
+        end,
+      },
+    },
+  },
+})
