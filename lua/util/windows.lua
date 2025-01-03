@@ -57,24 +57,38 @@ M.create_floating_window = function()
       height = size[2]
 
       -- 更新窗口大小和位置
-      vim.api.nvim_win_set_config(win, {
-        style = "minimal",
-        relative = "editor",
-        width = width + 1,
-        height = height,
-        row = initial_cursor_row,
-        col = initial_cursor_col,
-        border = "rounded",
-        title = "󰪚 Calculater",
-        -- title_pos = "center",
-      })
+      if width == 15 then
+        vim.api.nvim_win_set_config(win, {
+          style = "minimal",
+          relative = "editor",
+          width = width + 1,
+          height = height,
+          row = initial_cursor_row,
+          col = initial_cursor_col,
+          border = "rounded",
+          title = "󰪚 Calculater",
+          -- title_pos = "center",
+        })
+      else
+        vim.api.nvim_win_set_config(win, {
+          style = "minimal",
+          relative = "editor",
+          width = width + 1,
+          height = height,
+          row = initial_cursor_row,
+          col = initial_cursor_col,
+          border = "rounded",
+          title = "󰪚 Calculater",
+          -- title_pos = "center",
+        })
+      end
     end)
   end
 
   local opts = {
     style = "minimal",
     relative = "editor",
-    width = width,
+    width = width + 1,
     height = height,
     row = initial_cursor_row,
     col = initial_cursor_col,
