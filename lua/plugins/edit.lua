@@ -107,7 +107,7 @@ return {
         keymap = {
           preset = "none",
           ["<cr>"] = { "accept", "fallback" },
-          ["<tab>"] = { "snippet_forward", "fallback" },
+          -- ["<tab>"] = { "snippet_forward", "fallback" },
           ["<C-y>"] = { "select_and_accept" },
           ["<s-tab>"] = { "snippet_backward", "fallback" },
           ["<c-j>"] = { "scroll_documentation_up", "fallback" },
@@ -171,14 +171,15 @@ return {
             draw = {
               columns = { { "kind_icon", "label", "label_description", gap = 1 }, { "kind" } },
             },
-            border = "rounded",
+            border = { "󱕦", "─", "󰄛", "│", "", "─", "󰩃", "│" },
             winhighlight = "FloatBorder:CmpBorder",
             -- winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel,FloatBorder:CmpBorder",
           },
         },
         sources = {
           -- default = { "lsp", "path", "luasnip", "buffer", "ripgrep", "lazydev" },
-          default = { "lsp", "path", "luasnip", "buffer" },
+          default = { "lsp", "path", "luasnip", "buffer", "copilot" },
+          cmdline = {},
           providers = {
             lsp = {
               min_keyword_length = 0,
