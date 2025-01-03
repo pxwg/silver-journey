@@ -33,6 +33,7 @@ vim.o.ttimeoutlen = 10
 _G.rime_toggled = rime_toggled
 _G.rime_ls_active = rime_ls_active
 _G.notify_state = true
+_G.is_center_open = true
 
 local file_path = "/tmp/nvim_hammerspoon_latex.txt"
 local file = io.open(file_path, "r")

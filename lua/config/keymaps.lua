@@ -291,3 +291,8 @@ vim.api.nvim_create_autocmd("FileType", {
     end, { noremap = true, silent = true, desc = "Search Mathematica Definition" })
   end,
 })
+
+keymap.set("n", "<leader>ct", function()
+  require("stay-centered").toggle()
+  _G.is_center_open = not _G.is_center_open
+end, { desc = "Toggle stay-centered" })

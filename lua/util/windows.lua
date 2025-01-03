@@ -13,8 +13,22 @@ M.create_floating_window = function()
 
   local win
 
+  local function init_window()
+    if _G.is_center_open == false then
+      return vim.api.nvim_win_get_cursor(0)
+    else
+      local col = vim.api.nvim_win_get_cursor(0)[2]
+      local win_height = vim.api.nvim_win_get_height(0)
+      if tonumber(vim.api.nvim_win_get_cursor(0)[1]) < math.floor(win_height / 2) then
+        return vim.api.nvim_win_get_cursor(0)
+      else
+        return { math.floor(win_height / 2), col }
+      end
+    end
+  end
+
   -- 获取初始光标位置
-  local initial_cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local initial_cursor_pos = init_window()
   local initial_cursor_row = initial_cursor_pos[1] + 1
   local initial_cursor_col = initial_cursor_pos[2]
 
