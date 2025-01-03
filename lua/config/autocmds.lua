@@ -11,6 +11,8 @@ local toggle_rime_and_set_flag = function()
 end
 local tdf = require("util.tdf")
 
+require("lsp.rime_2").setup_rime()
+
 -- 定义一个命令来同步所有窗口的滚动和光标移动
 vim.api.nvim_create_user_command("SyncWindows", function()
   vim.cmd("windo set scrollbind cursorbind")
@@ -63,32 +65,7 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
   end,
 })
 
-local function switch_rime_math_md()
-  if vim.bo.filetype == "markdown" then
-    -- in the mathzone or table or tikz and rime is active, disable rime
-    if tex.in_latex() and rime_ls_active == true then
-      if _G.rime_toggled == true then
-        require("lsp.rime_2").toggle_rime()
-        _G.rime_toggled = false
-      end
-      -- in the text but rime is not active(by hand), do nothing
-    elseif _G.rime_ls_active == false then
-      -- in the text but rime is active(by hand ), thus the configuration is for mathzone or table or tikz
-    else
-      if _G.rime_toggled == false then
-        require("lsp.rime_2").toggle_rime()
-        _G.rime_toggled = true
-      end
-      if _G.rime_ls_active and _G.rime_toggled then
-      end
-    end
-  end
-end
-
-vim.api.nvim_create_autocmd("CursorMovedI", {
-  pattern = "*",
-  callback = switch_rime_math_md,
-})
+require("util.math_autochange")
 
 -- TODO: 让这段代码可以监控数学区域内的中文输入法是否打开，如果打开则打印到lualine ✅
 -- TODO: 支持英文输入的状态栏检测(单buffer) 每次进入buffer  需要手动改变输入法✅
@@ -111,7 +88,7 @@ if string.match(vim.env.PATH, "tex") then
 end
 
 vim.cmd([[
-set spell
+" set spell
 set spelllang=en,cjk]])
 
 -- local ts_utils = require("nvim-treesitter.ts_utils")
@@ -264,36 +241,17 @@ require("util.formatter")
 
 -- This is for firenvim
 
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = "github.com_*.txt",
-  command = "set filetype=markdown",
-})
+if vim.g.started_by_firenvim then
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    callback = require("util.firenvim").adjust_minimum_lines,
+  })
 
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = "zhuanlan.zhihu.com_*.txt",
-  command = "set filetype=markdown",
-})
+  vim.api.nvim_create_autocmd("BufEnter", {
+    callback = require("util.firenvim").adjust_minimum_lines,
+  })
 
-vim.api.nvim_create_autocmd("BufWritePost", {
-  callback = require("util.firenvim").adjust_minimum_lines,
-})
-
-vim.api.nvim_create_autocmd("BufEnter", {
-  callback = require("util.firenvim").adjust_minimum_lines,
-})
-
--- vim.api.nvim_create_autocmd("BufReadPost", {
---   pattern = "*.tex",
---   callback = function()
---     rime.disable_lsps()
---   end,
--- })
---
--- vim.api.nvim_create_autocmd("BufReadPost", {
---   pattern = "*.md",
---   callback = function()
---     vim.cmd([[LspStop marksman]])
---   end,
--- })
-require("util.math_autochange")
-require("lsp.rime_2").setup_rime()
+  vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    pattern = "*.txt",
+    command = "set filetype=markdown",
+  })
+end

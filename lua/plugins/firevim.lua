@@ -13,7 +13,7 @@ return {
             cmdline = "neovim",
             content = "text",
             selector = "textarea",
-            takeover = "once",
+            takeover = "never",
           },
         },
       }
