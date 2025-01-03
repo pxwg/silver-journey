@@ -234,6 +234,7 @@ vim.api.nvim_create_autocmd("FileType", {
     -- vim.notify("Wolfram LSP started", vim.log.levels.INFO, { title = "Wolfram LSP" })
     require("util.lang-mma").check_wolfarm()
     vim.lsp.buf_attach_client(0, client)
+    _G.notify_state = true
   end,
 })
 _G.notify_state = false
@@ -279,7 +280,7 @@ require("telescope").setup({
 vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = function()
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_get_name(buf) == "Untitled" then
+      if vim.api.nvim_buf_get_name(buf) == nil then
         vim.api.nvim_buf_delete(buf, { force = true })
       end
     end

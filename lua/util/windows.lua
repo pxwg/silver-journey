@@ -75,6 +75,7 @@ M.create_floating_window = function()
   -- 设置按键映射来关闭窗口和 buffer
   vim.api.nvim_buf_set_keymap(buf, "n", "q", "<Cmd>lua ConfirmSaveAndClose()<CR>", { noremap = true, silent = true })
   vim.api.nvim_buf_set_keymap(buf, "n", "<C-s>", "<Cmd>lua ConifrmAndSave()<CR>", { noremap = true, silent = true })
+  vim.api.nvim_buf_set_keymap(buf, "i", "<C-s>", "<Cmd>lua ConifrmAndSave()<CR>", { noremap = true, silent = true })
 
   -- 定义确认保存并关闭的函数
   function ConfirmSaveAndClose()
@@ -89,7 +90,7 @@ M.create_floating_window = function()
         end
         SaveAndClose()
       else
-        vim.api.nvim_command("q")
+        vim.api.nvim_command("q!")
       end
     end)
   end
@@ -107,7 +108,7 @@ M.create_floating_window = function()
   function SaveAndClose()
     local file_path = "~/Desktop/physics/mma_draft/mma_" .. os.date("%Y%m%d%H%M%S") .. ".nb"
     vim.api.nvim_command("write " .. file_path)
-    vim.api.nvim_command("q")
+    vim.api.nvim_command("bdelete")
   end
 
   function Save()

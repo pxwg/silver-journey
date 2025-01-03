@@ -12,7 +12,8 @@ return {
     opts.options = opts.options or {}
     opts.options.custom_filter = function(buf_number)
       local buf_ft = vim.bo[buf_number].filetype
-      if buf_ft == "copilot-chat" or buf_ft == "snacks_dashboard" then
+      local buf_name = vim.fn.bufname(buf_number)
+      if buf_ft == "copilot-chat" or buf_ft == "snacks_dashboard" or buf_name == "" then
         return false
       end
       return true
