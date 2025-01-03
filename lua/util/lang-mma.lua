@@ -58,7 +58,6 @@ function M.check_wolfarm()
         M.spin_notify() -- Second call after LSP is enabled
       elseif M.check_lsps() then
         close_timer()
-        vim.b.lsp_disabled = true
         M.spin_notify() -- Second call after LSP is disabled
       end
     end)
