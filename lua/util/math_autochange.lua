@@ -7,6 +7,7 @@ local function switch_rime_math()
     if (tex.in_mathzone() == true or tex.in_tikz() == true) and rime_ls_active == true then
       if _G.rime_toggled == true then
         require("lsp.rime_2").toggle_rime()
+        vim.cmd("Copilot enable")
         _G.rime_toggled = false
       end
       -- in the text but rime is not active(by hand), do nothing
@@ -15,6 +16,7 @@ local function switch_rime_math()
     else
       if _G.rime_toggled == false then
         require("lsp.rime_2").toggle_rime()
+        vim.cmd("Copilot disable")
         _G.rime_toggled = true
       end
     end
