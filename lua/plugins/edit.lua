@@ -1,3 +1,18 @@
+-- local utf8 = require("utf8")
+
+function truncate_non_ascii(str)
+  for i = 1, #str do
+    if string.byte(str, i) > 127 then
+      return str:sub(1, i - 1)
+    end
+  end
+  return str
+end
+
+local function truncate_non_utf8(input)
+  return vim.fn.system("~/.config/nvim/script/non_utf8/target/release/non_utf8_project '" .. input .. "'")
+end
+
 function contains_unacceptable_character(content)
   if content == nil then
     return true
@@ -224,14 +239,15 @@ return {
                     item.score_offset = item.score_offset - 3
                   end
                 end
-                -- filter non-acceptable rime items
-                return vim.tbl_filter(function(item)
-                  if not is_rime_item(item) then
-                    return true
-                  end
-                  item.detail = nil
-                  return rime_item_acceptable(item)
-                end, items)
+                return items
+                -- filter non-acceptable rime items (e.g. English item)
+                -- return vim.tbl_filter(function(item)
+                --   if not is_rime_item(item) then
+                --     return true
+                --   end
+                --   item.detail = nil
+                --   return rime_item_acceptable(item)
+                -- end, items)
               end,
             },
             buffer = { max_items = 5 },
@@ -253,7 +269,30 @@ return {
                 for _, item in ipairs(items) do
                   item.kind = kind_idx
                 end
+
+                -- filter non-acceptable (non-ascii) items
+                for _, item in ipairs(items) do
+                  item.kind = kind_idx
+                  if item.label then
+                    item.label = truncate_non_utf8(item.label)
+                  end
+                  if item.insertText then
+                    item.insertText = truncate_non_utf8(item.insertText)
+                  end
+                  if item.textEdit and item.textEdit.newText then
+                    item.textEdit.newText = truncate_non_utf8(item.textEdit.newText)
+                  end
+                end
                 return items
+
+                -- filter non-acceptable rime items (e.g. English item)
+                -- return vim.tbl_filter(function(item)
+                --   if not is_rime_item(item) then
+                --     return true
+                --   end
+                --   item.detail = nil
+                --   return rime_item_acceptable(item)
+                -- end, items)
               end,
             },
             ripgrep = {
