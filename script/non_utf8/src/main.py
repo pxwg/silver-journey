@@ -14,7 +14,7 @@ def load_chinese_char_map(file_path):
 # print(load_chinese_char_map("/Users/pxwg-dogggie/.config/nvim/script/non_utf8/src/cn-utf8.txt"))
 
 def clean_string(input_str, chinese_char_map):
-    allowed_chars = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?，。！？()[] /\\'\"+-{}*^%$#@!&_")
+    allowed_chars = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?，。！？()[] /\\'\"+-{}*^%$#@!&_=\n")
     result = []
     is_line_start = True
 
