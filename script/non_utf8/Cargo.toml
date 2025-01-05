@@ -1,0 +1,7 @@
+[package]
+name = "non_utf8_project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+regex = "1"
