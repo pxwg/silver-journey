@@ -10,7 +10,7 @@ function truncate_non_ascii(str)
 end
 
 local function truncate_non_utf8(input)
-  return vim.fn.system("~/.config/nvim/script/non_utf8/target/release/non_utf8_project '" .. input .. "'")
+  return vim.fn.system("python3 ~/.config/nvim/script/non_utf8/src/main.py '" .. input .. "'")
 end
 
 function contains_unacceptable_character(content)
