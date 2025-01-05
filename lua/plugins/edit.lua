@@ -84,10 +84,15 @@ return {
     dependencies = {
       -- add source
       {
+        "zbirenbaum/copilot-cmp",
         "dmitmel/cmp-digraphs",
         "L3MON4D3/LuaSnip",
         "mikavilpas/blink-ripgrep.nvim",
         "giuxtaposition/blink-cmp-copilot",
+        {
+          "saghen/blink.compat",
+          opts = { impersonate_nvim_cmp = true, enable_events = true },
+        },
         -- "zbirenbaum/copilot-cmp",
       },
     },
@@ -118,20 +123,21 @@ return {
         set_hl("BlinkCmpKind" .. kind, { link = "CmpItemKind" .. kind or "BlinkCmpKind" })
       end
 
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpMenuOpen",
-        callback = function()
-          require("copilot.suggestion").dismiss()
-          vim.b.copilot_suggestion_hidden = true
-        end,
-      })
-
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "BlinkCmpMenuClose",
-        callback = function()
-          vim.b.copilot_suggestion_hidden = false
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("User", {
+      --   pattern = "BlinkCmpMenuOpen",
+      --   callback = function()
+      --     require("copilot.suggestion").dismiss()
+      --     vim.b.copilot_suggestion_hidden = true
+      --   end,
+      -- })
+      --
+      -- vim.api.nvim_create_autocmd("User", {
+      --   pattern = "BlinkCmpMenuClose",
+      --   callback = function()
+      --     vim.b.copilot_suggestion_hidden = false
+      --   end,
+      -- })
+      require("copilot_cmp").setup()
       require("blink.cmp").setup({
         keymap = {
           preset = "none",
@@ -259,7 +265,8 @@ return {
             },
             copilot = {
               name = "copilot",
-              module = "blink-cmp-copilot",
+              -- module = "blink-cmp-copilot",
+              module = "blink.compat.source",
               score_offset = 100,
               async = true,
               transform_items = function(_, items)
