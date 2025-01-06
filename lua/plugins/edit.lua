@@ -77,7 +77,7 @@ return {
   },
   {
     "saghen/blink.cmp",
-    -- event = "InsertEnter",
+    event = "InsertEnter",
     -- use a release tag to download pre-built binaries
     version = "*",
     build = "cargo build --release",
