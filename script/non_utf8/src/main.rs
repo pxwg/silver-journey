@@ -1,21 +1,26 @@
+use rayon::prelude::*;
 use std::collections::HashSet;
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
 
 fn load_chinese_char_map(file_path: &str) -> io::Result<Vec<String>> {
-    let mut char_list = Vec::new();
     let file = File::open(file_path)?;
     let reader = io::BufReader::new(file);
 
-    for line in reader.lines() {
-        let line = line?;
-        let parts: Vec<&str> = line.split(" --->").collect();
-        if parts.len() == 2 {
-            let value = parts[1].trim().to_string();
-            char_list.push(value);
-        }
-    }
+    let char_list: Vec<String> = reader
+        .lines()
+        .par_bridge()
+        .filter_map(|line| {
+            if let Ok(line) = line {
+                let parts: Vec<&str> = line.split(" --->").collect();
+                if parts.len() == 2 {
+                    return Some(parts[1].trim().to_string());
+                }
+            }
+            None
+        })
+        .collect();
 
     Ok(char_list)
 }
@@ -25,7 +30,7 @@ fn clean_string(input_str: &str, chinese_char_map: &[String]) -> String {
         .chars()
         .collect();
     let chinese_char_set: HashSet<&str> = chinese_char_map.iter().map(|s| s.as_str()).collect();
-    let mut result = String::new();
+    let mut result = String::with_capacity(input_str.len()); // 预分配足够的空间
     let mut is_line_start = true;
 
     for c in input_str.chars() {
@@ -57,7 +62,4 @@ fn main() {
             .expect("Failed to load Chinese character map");
     let cleaned = clean_string(input_str, &chinese_char_map);
     println!("{}", cleaned);
-
-    // let duration = start.elapsed();
-    // println!("Time elapsed: {:?}", duration);
 }
