@@ -33,6 +33,7 @@ function contains_unacceptable_character(content)
   end
   return false
 end
+
 function is_rime_item(item)
   if item == nil or item.source_name ~= "LSP" then
     return false
@@ -45,6 +46,7 @@ function rime_item_acceptable(item)
   -- return true
   return not contains_unacceptable_character(item.label) or item.label:match("%d%d%d%d%-%d%d%-%d%d %d%d:%d%d:%d%d%")
 end
+
 function get_n_rime_item_index(n, items)
   if items == nil then
     items = require("blink.cmp.completion.list").items
@@ -62,6 +64,14 @@ function get_n_rime_item_index(n, items)
     end
   end
   return result
+end
+
+function is_texlab_item(item)
+  if item == nil or item.source_name ~= "LSP" then
+    return false
+  end
+  local client = vim.lsp.get_client_by_id(item.client_id)
+  return client ~= nil and client.name == "texlab"
 end
 
 return {
@@ -246,15 +256,17 @@ return {
                     item.score_offset = item.score_offset - 3
                   end
                 end
-                -- return items
-                -- filter non-acceptable rime items (e.g. English item)
-                return vim.tbl_filter(function(item)
-                  if not is_rime_item(item) then
-                    return true
-                  end
-                  item.detail = nil
-                  return rime_item_acceptable(item)
-                end, items)
+                -- you can define your own filter for rime item
+                return items
+                --   -- return items
+                --   -- filter non-acceptable rime items (e.g. English item)
+                --   return vim.tbl_filter(function(item)
+                --     if not is_rime_item(item) then
+                --       return true
+                --     end
+                --     item.detail = nil
+                --     return rime_item_acceptable(item)
+                --   end, items)
               end,
             },
             buffer = { max_items = 5 },
@@ -262,7 +274,7 @@ return {
             lazydev = {
               name = "LazyDev",
               module = "lazydev.integrations.blink",
-              score_offset = 100,
+              score_offset = 0,
             },
             copilot = {
               name = "copilot",
