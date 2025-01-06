@@ -2,7 +2,7 @@
 
 ![dashboard](./readme_fig/new_dashboard.png)
 
-这是本人自用的 Neovim 配置，改变自本人原本的配置[MACOS_nvim_config](https://github.com/pxwg/MACOS_nvim_config)。
+这是本人自用的 Neovim 配置，迭代自本人原本的配置[MACOS_nvim_config](https://github.com/pxwg/MACOS_nvim_config)。
 
 因为不满于 Neovim 原生的中文输入支持 (需要频繁切换输入法，且例如 `jj` `jk` 等的字母快捷键不能在中文输入法被激活时使用)，进行了基于 [rime](https://github.com/rime) 的中文输入法集成，实现了中文数学笔记的无输入法切换输入，目前中文输入经短期测试可以流畅使用，已被用于课堂笔记 (虽然现在很多都是用英文写的了) 、论文和实验报告 (这个必须得中文写) 的书写中。
 
@@ -14,9 +14,9 @@
 
 ![UI](./readme_fig/new_full_workspace.png)
 
-* 基本配置思路：专注速度，多语言输入与性能。不满足于简单的解决方案，而是尽可能面向未来组织功能设计;
+* 基本配置思路：专注**速度**，**多语言输入**与 **性能**。不满足于简单的解决方案，而是尽可能面向未来组织功能设计;
 
-部分联动配置使用 apple script 实现，目前没有跨平台方案。Linux 下 inkscape 联动可以参考[castel 的绘图配置](https://github.com/gillescastel/inkscape-figures) 与 [castel 的图片管理配置](https://github.com/gillescastel/inkscape-shortcut-manager)。
+<!-- 部分联动配置使用 apple script 实现，目前没有跨平台方案。Linux 下 inkscape 联动可以参考 [castel 的绘图配置](https://github.com/gillescastel/inkscape-figures) 与 [castel 的图片管理配置](https://github.com/gillescastel/inkscape-shortcut-manager)。 -->
 
 ## ✈️  Features
 
@@ -44,6 +44,8 @@
 
 * 利用快捷键`<C-m>` 唤出浮动窗口写入 Mathematica 代码，利用 sniprun `<leader>cr`运行，实现利用 Mathematica 作为科学计算器辅助论文写作。
 
+* 仿照 Mathematica 笔记本的设计，输入`<leader>fd` 之后可以跳转到相应函数的文档 (因为纯文本很难完整复现 Mathematica 笔记本内的良好操作，我目前还是采用直接调用 Mathematica 笔记本阅读文档);
+
 * 彩蛋用法：通过`setfiletype xxx` 的 vim 命令，这个浮动窗口事实上可以运行任意的代码，包括一些快速的代码实验！
 
 ### ai 辅助编辑
@@ -57,7 +59,7 @@ print("hello world")
 ```
 直接输入快捷键 `<leader>ag` 就可以跳转到这个代码块并选择。这个操作的设计是为了和 copilotchat.nvim 配合使用，可以实现代码块的快速选取，并利用快捷键 `<leader>ai` 或 `<leader>aI`快速补全到正文文本之中，这两个快捷键的区别在于一个插入到正文所选文本之后不会返回 copilotchat.nvim 的 buffer，另一个会返回;同时还添加了`<leader>an`在所选文段以下插入代码块，用来适应告诉 GPT 你的函数，让他生成一个类似函数的工作情形。copilotchat.nvim 本身自带了一套快捷键`<C-y>` 与 `gd` 来分别更新代码与查看代码变化，但原本的快捷键不是特别灵活，故设计了上述快捷键;
 
-* 为了集成上述七扭八歪配置做出了一系列反人类举动，通过配置加载序列目前在 M3 MacBook Pro 上的启动速度稳定在 35ms 左右;
+* 因为 blink-cmp 的最新设置，Copilot 的自动补全在中文环境下会输出非 UTF-8 字符，这将导致各种 LSP 全部断线。为了修正这个情况并减少输入延迟，使用 rust 编辑了一个过滤器筛出非 UTF-8 词语，响应速度毫秒级;
 
 ~~你说得对，但是 neovim 是一款开源 (迫真) 的开放世界 (迫真) 游戏，在这里你将扮演 root，导引 lua 之力，与一系列 readme 一行，没有 doc 的插件斗智斗勇，并在*解决插件冲突*的过程中逐渐发掘 **VScode** 的真相~~
 
@@ -77,7 +79,9 @@ print("hello world")
 
 ### 杂项
 
-* 利用[gitsinge](https://github.com/lewis6991/gitsigns.nvim) 的功能，只对 commit 之后的文件进行格式化，防止错误地对之前已经稳定的代码进行格式化导致可能的崩溃 (目前这个功能还在 debug 之中，原本的逻辑非常令人不满意);
+* 利用[gitsigns](https://github.com/lewis6991/gitsigns.nvim) 的功能，只对 commit 之后的文件进行格式化，防止错误地对之前已经稳定的代码进行格式化导致可能的崩溃 (目前这个功能还在 debug 之中，原本的逻辑非常令人不满意);
+
+* 与 Hammerspoon 集成，同一套快捷键可以用来切换 neovim 内部的窗口，也可以在临界位置切换到当前终端外部。
 
 * Snacks 自带的 zen-mode 与 WezTerm 的透明度设定继承，当启动 zen-mode 时，WezTerm 会自动关闭透明度并增加字数，提升代码阅读速度 (不过如果遇到中文可能会慢一点，大概需要多那么两三秒才能完整渲染中文字符，这应该是 WezTerm 的问题)。
 
