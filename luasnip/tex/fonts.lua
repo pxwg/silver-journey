@@ -116,14 +116,14 @@ return {
   ),
   s(
     { trig = "emph", snippetType = "autosnippet", priority = 2000 },
-    fmta("\\emph{<>} <>", {
+    fmta("\\emph{ <>} <>", {
       d(1, get_visual),
       i(0),
     })
   ),
   s(
     { trig = "\\emph", snippetType = "autosnippet", priority = 3000 },
-    fmta("\\emph{<>}", {
+    fmta("\\emph{ <>}", {
       d(1, get_visual),
     })
   ),

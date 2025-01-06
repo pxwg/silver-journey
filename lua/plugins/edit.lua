@@ -123,20 +123,21 @@ return {
         set_hl("BlinkCmpKind" .. kind, { link = "CmpItemKind" .. kind or "BlinkCmpKind" })
       end
 
-      -- vim.api.nvim_create_autocmd("User", {
-      --   pattern = "BlinkCmpMenuOpen",
-      --   callback = function()
-      --     require("copilot.suggestion").dismiss()
-      --     vim.b.copilot_suggestion_hidden = true
-      --   end,
-      -- })
-      --
-      -- vim.api.nvim_create_autocmd("User", {
-      --   pattern = "BlinkCmpMenuClose",
-      --   callback = function()
-      --     vim.b.copilot_suggestion_hidden = false
-      --   end,
-      -- })
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuOpen",
+        callback = function()
+          require("copilot.suggestion").dismiss()
+          vim.b.copilot_suggestion_hidden = true
+        end,
+      })
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuClose",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = false
+        end,
+      })
+
       require("copilot_cmp").setup()
       require("blink.cmp").setup({
         keymap = {
@@ -195,7 +196,7 @@ return {
           },
         },
         completion = {
-          ghost_text = { enabled = true },
+          -- ghost_text = { enabled = true },
           documentation = {
             auto_show = true,
             window = {
@@ -245,15 +246,15 @@ return {
                     item.score_offset = item.score_offset - 3
                   end
                 end
-                return items
+                -- return items
                 -- filter non-acceptable rime items (e.g. English item)
-                -- return vim.tbl_filter(function(item)
-                --   if not is_rime_item(item) then
-                --     return true
-                --   end
-                --   item.detail = nil
-                --   return rime_item_acceptable(item)
-                -- end, items)
+                return vim.tbl_filter(function(item)
+                  if not is_rime_item(item) then
+                    return true
+                  end
+                  item.detail = nil
+                  return rime_item_acceptable(item)
+                end, items)
               end,
             },
             buffer = { max_items = 5 },
@@ -278,18 +279,18 @@ return {
                 end
 
                 -- filter non-acceptable (non-ascii) items
-                for _, item in ipairs(items) do
-                  item.kind = kind_idx
-                  if item.label then
-                    item.label = truncate_non_utf8(item.label)
-                  end
-                  if item.insertText then
-                    item.insertText = truncate_non_utf8(item.insertText)
-                  end
-                  if item.textEdit and item.textEdit.newText then
-                    item.textEdit.newText = truncate_non_utf8(item.textEdit.newText)
-                  end
-                end
+                -- for _, item in ipairs(items) do
+                --   item.kind = kind_idx
+                --   if item.label then
+                --     item.label = truncate_non_utf8(item.label)
+                --   end
+                --   if item.insertText then
+                --     item.insertText = truncate_non_utf8(item.insertText)
+                --   end
+                --   if item.textEdit and item.textEdit.newText then
+                --     item.textEdit.newText = truncate_non_utf8(item.textEdit.newText)
+                --   end
+                -- end
                 return items
 
                 -- filter non-acceptable rime items (e.g. English item)

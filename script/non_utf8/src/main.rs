@@ -26,7 +26,7 @@ fn load_chinese_char_map(file_path: &str) -> io::Result<Vec<String>> {
 }
 
 fn clean_string(input_str: &str, chinese_char_map: &[String]) -> String {
-    let allowed_chars: HashSet<char> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?，。！？()[] /\\'\"+-{}*^%$#@!&_=\n"
+    let allowed_chars: HashSet<char> = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,!?：，。！？()[] /\\'\"+-{}*^%$#@!&;_|=:"
         .chars()
         .collect();
     let chinese_char_set: HashSet<&str> = chinese_char_map.iter().map(|s| s.as_str()).collect();
