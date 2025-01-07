@@ -129,7 +129,7 @@ return {
   ),
   s(
     { trig = "km", snippetType = "autosnippet", priority = 3000 },
-    fmta("$<>$<>", {
+    fmta("$<>$ <>", {
       d(1, get_visual),
       i(0),
     })

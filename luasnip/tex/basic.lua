@@ -21,10 +21,13 @@ end
 
 return {
   s(
-    { trig = "mk", wordTrig = true, snippetType = "autosnippet", trigEngine = "ecma" },
-    fmta([[$<>$ <>]], { i(1), i(0) })
+    { trig = "km", wordTrig = true, snippetType = "autosnippet", trigEngine = "ecma" },
+    { t("$"), i(1), t("$ "), i(0) }
   ),
-  s({ trig = "km", wordTrig = true, snippetType = "autosnippet" }, fmta([[$<>$ <>]], { i(1), i(0) })),
+  s(
+    { trig = "mk", wordTrig = true, snippetType = "autosnippet", trigEngine = "ecma" },
+    { t("$"), i(1), t("$ "), i(0) }
+  ),
   s(
     { trig = "td", wordTrig = false, snippetType = "autosnippet" },
     { t("_{"), i(1), t("}"), i(0) },
