@@ -64,19 +64,85 @@ A language server for librime
       enabled = vim.g.rime_enabled,
       shared_data_dir = "/Library/Input Methods/Squirrel.app/Contents/SharedSupport",
       user_data_dir = "~/Library/Rime_2/",
-      log_dir = vim.fn.expand("~/.local/share/rime-ls"),
+      log_dir = vim.fn.expand("~/.local/share/rime-ls-1/"),
       -- paging_characters = { "-", "=", ",", ".", "?", "!" },
       paging_characters = { ",", "." },
       trigger_characters = {},
       schema_trigger_character = "&",
+      always_incomplete = false,
+      preselect_first = false,
       show_filter_text_in_label = false,
       max_candidates = 9,
+      max_tokens = 0,
       long_filter_text = true,
     },
     -- on_attach = attach_in_insert_mode,
     on_attach = rime_on_attach,
     capabilities = capabilities,
   })
+
+  -- config for nvim-cmp
+  -- if require("cmp") then
+  --   local function is_rime_entry(entry)
+  --     return vim.tbl_get(entry, "source", "name") == "nvim_lsp"
+  --       and vim.tbl_get(entry, "source", "source", "client", "name") == "rime_ls"
+  --   end
+  --   local cmp = require("cmp")
+  --   local function auto_upload_rime()
+  --     if not cmp.visible() then
+  --       return
+  --     end
+  --     local entries = cmp.core.view:get_entries()
+  --     if entries == nil or #entries == 0 then
+  --       return
+  --     end
+  --     local first_entry = cmp.get_selected_entry()
+  --     if first_entry == nil then
+  --       first_entry = cmp.core.view:get_first_entry()
+  --     end
+  --     if first_entry ~= nil and is_rime_entry(first_entry) then
+  --       local rime_ls_entries_cnt = 0
+  --       for _, entry in ipairs(entries) do
+  --         if is_rime_entry(entry) then
+  --           rime_ls_entries_cnt = rime_ls_entries_cnt + 1
+  --           if rime_ls_entries_cnt == 2 then
+  --             break
+  --           end
+  --         end
+  --       end
+  --       if rime_ls_entries_cnt == 1 then
+  --         cmp.confirm({
+  --           behavior = cmp.ConfirmBehavior.Insert,
+  --           select = true,
+  --         })
+  --       end
+  --     end
+  --   end
+  --   vim.api.nvim_create_autocmd("FileType", {
+  --     pattern = rime_ls_filetypes,
+  --     callback = function()
+  --       for numkey = 1, 9 do
+  --         local numkey_str = tostring(numkey)
+  --         vim.api.nvim_buf_set_keymap(0, "i", numkey_str, "", {
+  --           noremap = true,
+  --           silent = false,
+  --           callback = function()
+  --             vim.fn.feedkeys(numkey_str, "n")
+  --             vim.schedule(auto_upload_rime)
+  --           end,
+  --         })
+  --         vim.api.nvim_buf_set_keymap(0, "s", numkey_str, "", {
+  --           noremap = true,
+  --           silent = false,
+  --           callback = function()
+  --             vim.fn.feedkeys(numkey_str, "n")
+  --             vim.schedule(auto_upload_rime)
+  --           end,
+  --         })
+  --       end
+  --     end,
+  --   })
+  -- end
 end
 
 function M.toggle_rime()
