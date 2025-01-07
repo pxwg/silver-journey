@@ -82,7 +82,7 @@ return {
     event = "InsertEnter",
     -- use a release tag to download pre-built binaries
     version = "*",
-    enabled = true,
+    -- enabled = true,
     build = "cargo build --release",
     dependencies = {
       -- add source
