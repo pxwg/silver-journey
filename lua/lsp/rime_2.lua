@@ -32,6 +32,22 @@ A language server for librime
       },
     }
   end
+  -- if last char is number, and the only completion item is provided by rime-ls, accept it
+  -- require("blink.cmp.completion.list").show_emitter:on(function(event)
+  --   if not vim.g.rime_enabled then
+  --     return
+  --   end
+  --   local col = vim.fn.col(".") - 1
+  --   -- if you don't want use number to select, change the match pattern by yourself
+  --   if event.context.line:sub(col, col):match("%d") == nil then
+  --     return
+  --   end
+  --   local rime_item_index = get_n_rime_item_index(2, event.items)
+  --   if #rime_item_index ~= 1 then
+  --     return
+  --   end
+  --   require("blink.cmp").accept({ index = rime_item_index[1] })
+  -- end)
 
   local rime_on_attach = function(client, _)
     local toggle_rime = function()
