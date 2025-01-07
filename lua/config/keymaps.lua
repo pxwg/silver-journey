@@ -144,6 +144,7 @@ keymap.set("i", "jn", function()
   require("lsp.rime_2").toggle_rime()
   _G.rime_toggled = not _G.rime_toggled
   _G.rime_ls_active = not _G.rime_ls_active
+  _G.rime_closed_man = not _G.rime_closed_man
 end, { noremap = true, silent = true, desc = "toggle rime-ls" })
 -- windows manager with hammerspoon
 
