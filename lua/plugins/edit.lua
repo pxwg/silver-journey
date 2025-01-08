@@ -80,6 +80,7 @@ return {
   {
     "saghen/blink.cmp",
     event = "InsertEnter",
+    enabled = true,
     -- use a release tag to download pre-built binaries
     version = "*",
     -- enabled = true,
@@ -170,6 +171,19 @@ return {
             end,
             "fallback",
           },
+          ["1"] = {
+            function(cmp)
+              if not vim.g.rime_enabled then
+                return false
+              end
+              local rime_item_index = get_n_rime_item_index(1)
+              if #rime_item_index ~= 1 then
+                return false
+              end
+              return cmp.accept({ index = rime_item_index[1] })
+            end,
+            "fallback",
+          },
           [";"] = {
             -- FIX: can not work when binding ;<space> to other key
             function(cmp)
@@ -199,7 +213,7 @@ return {
           },
         },
         completion = {
-          -- ghost_text = { enabled = true },
+          ghost_text = { enabled = true },
           documentation = {
             auto_show = true,
             window = {
@@ -233,10 +247,11 @@ return {
             -- winhighlight = "Normal:CmpPmenu,CursorLine:CmpSel,Search:PmenuSel,FloatBorder:CmpBorder",
           },
         },
+        snippets = { preset = "luasnip" },
         -- fuzzy = { use_typo_resistance = true, use_proximity = false, use_frecency = false, use_unsafe_no_lock = false },
         sources = {
-          -- default = { "lsp", "path", "luasnip", "buffer", "ripgrep", "lazydev" },
-          default = { "lsp", "path", "buffer", "copilot" },
+          default = { "lsp", "path", "buffer", "lazydev", "copilot" },
+          -- default = { "lsp", "path", "buffer", "copilot" },
           cmdline = {},
           providers = {
             lsp = {
@@ -246,15 +261,17 @@ return {
               transform_items = function(_, items)
                 -- demote snippets
                 for _, item in ipairs(items) do
-                  if item.kind == require("blink.cmp.types").CompletionItemKind.Snippet then
-                    item.score_offset = item.score_offset - 3
+                  -- if item.kind == require("blink.cmp.types").CompletionItemKind.Snippet then
+                  --   item.score_offset = item.score_offset - 3
+                  -- end
+                  if item.kind == require("blink.cmp.types").CompletionItemKind.Text then
+                    item.score_offset = item.score_offset + 2
                   end
                 end
                 return items
               end,
             },
             buffer = { max_items = 5 },
-            luasnip = { name = "Snip" },
             lazydev = {
               name = "LazyDev",
               module = "lazydev.integrations.blink",
@@ -288,15 +305,6 @@ return {
                 --   end
                 -- end
                 return items
-
-                -- filter non-acceptable rime items (e.g. English item)
-                -- return vim.tbl_filter(function(item)
-                --   if not is_rime_item(item) then
-                --     return true
-                --   end
-                --   item.detail = nil
-                --   return rime_item_acceptable(item)
-                -- end, items)
               end,
             },
             ripgrep = {
@@ -532,4 +540,67 @@ return {
 
     main = "lazyvim.util.cmp",
   },
+  config = function()
+    if require("cmp") then
+      local function is_rime_entry(entry)
+        return vim.tbl_get(entry, "source", "name") == "nvim_lsp"
+          and vim.tbl_get(entry, "source", "source", "client", "name") == "rime_ls"
+      end
+      local cmp = require("cmp")
+      local function auto_upload_rime()
+        if not cmp.visible() then
+          return
+        end
+        local entries = cmp.core.view:get_entries()
+        if entries == nil or #entries == 0 then
+          return
+        end
+        local first_entry = cmp.get_selected_entry()
+        if first_entry == nil then
+          first_entry = cmp.core.view:get_first_entry()
+        end
+        if first_entry ~= nil and is_rime_entry(first_entry) then
+          local rime_ls_entries_cnt = 0
+          for _, entry in ipairs(entries) do
+            if is_rime_entry(entry) then
+              rime_ls_entries_cnt = rime_ls_entries_cnt + 1
+              if rime_ls_entries_cnt == 2 then
+                break
+              end
+            end
+          end
+          if rime_ls_entries_cnt == 1 then
+            cmp.confirm({
+              behavior = cmp.ConfirmBehavior.Insert,
+              select = true,
+            })
+          end
+        end
+      end
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "*",
+        callback = function()
+          for numkey = 1, 9 do
+            local numkey_str = tostring(numkey)
+            vim.api.nvim_buf_set_keymap(0, "i", numkey_str, "", {
+              noremap = true,
+              silent = false,
+              callback = function()
+                vim.fn.feedkeys(numkey_str, "n")
+                vim.schedule(auto_upload_rime)
+              end,
+            })
+            vim.api.nvim_buf_set_keymap(0, "s", numkey_str, "", {
+              noremap = true,
+              silent = false,
+              callback = function()
+                vim.fn.feedkeys(numkey_str, "n")
+                vim.schedule(auto_upload_rime)
+              end,
+            })
+          end
+        end,
+      })
+    end
+  end,
 }
