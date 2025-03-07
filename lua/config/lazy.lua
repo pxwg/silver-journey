@@ -25,10 +25,8 @@ local rime_toggled = true --默认打开require("lsp.rime_2")_ls
 
 vim.opt.spell = false
 vim.env.LANG = "zh_CN.UTF-8"
-vim.o.timeoutlen = 50
 vim.o.ttimeout = true
 vim.opt.list = false
--- vim.o.ttimeoutlen = 10
 
 _G.rime_toggled = rime_toggled
 _G.rime_ls_active = rime_ls_active

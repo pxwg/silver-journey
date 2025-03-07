@@ -80,7 +80,7 @@ return {
   {
     "saghen/blink.cmp",
     event = "InsertEnter",
-    enabled = true,
+    enabled = false,
     -- use a release tag to download pre-built binaries
     version = "*",
     -- enabled = true,
@@ -250,7 +250,7 @@ return {
         snippets = { preset = "luasnip" },
         -- fuzzy = { use_typo_resistance = true, use_proximity = false, use_frecency = false, use_unsafe_no_lock = false },
         sources = {
-          default = { "lsp", "path", "buffer", "lazydev", "copilot" },
+          default = { "lsp", "path", "buffer", "copilot" },
           -- default = { "lsp", "path", "buffer", "copilot" },
           cmdline = {},
           providers = {
@@ -374,15 +374,15 @@ return {
     end,
   },
   {
-    "hrsh7th/nvim-cmp",
-    version = false, -- last release is way too old
+    "iguanacucumber/magazine.nvim",
+    name = "nvim-cmp", -- Otherwise highlighting gets messed up
     event = { "InsertEnter", "CmdlineEnter" },
-    dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-    },
-    enabled = false,
+
+    { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
+    { "iguanacucumber/mag-nvim-lua", name = "cmp-nvim-lua" },
+    { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
+    { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
+    enabled = true,
     opts = function()
       -- Existing nvim-cmp configuration
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
@@ -391,29 +391,29 @@ return {
       local defaults = require("cmp.config.default")()
       local auto_select = true
 
-      --     -- Integrate rime_ls configuration
-      --     local lspconfig = require("lspconfig")
-      --     local configs = require("lspconfig.configs")
-      --     local rime_ls_filetypes = { "markdown", "text", "org", "latex" } -- Define your filetypes here
-      --
-      --     if not configs.rime_ls then
-      --       configs.rime_ls = {
-      --         default_config = {
-      --           name = "rime_ls",
-      --           cmd = { vim.fn.expand("~/Desktop/rime-ls-0.4.0/target/release/rime_ls") },
-      --           filetypes = rime_ls_filetypes,
-      --           single_file_support = true,
-      --         },
-      --         settings = {},
-      --         docs = {
-      --           description = [[
-      -- https://www.github.com/wlh320/rime-ls
-      --
-      -- A language server for librime
-      -- ]],
-      --         },
-      --       }
-      --     end
+      -- Integrate rime_ls configuration
+      local lspconfig = require("lspconfig")
+      local configs = require("lspconfig.configs")
+      local rime_ls_filetypes = { "markdown", "text", "org", "latex" } -- Define your filetypes here
+
+      if not configs.rime_ls then
+        configs.rime_ls = {
+          default_config = {
+            name = "rime_ls",
+            cmd = { vim.fn.expand("~/Desktop/rime-ls-0.4.0/target/release/rime_ls") },
+            filetypes = rime_ls_filetypes,
+            single_file_support = true,
+          },
+          settings = {},
+          docs = {
+            description = [[
+       https://www.github.com/wlh320/rime-ls
+
+       A language server for librime
+       ]],
+          },
+        }
+      end
       --
       cmp.setup.filetype("copilot-chat", {
         sources = cmp.config.sources({

@@ -49,7 +49,6 @@ local function save_and_delete_last_line()
   local cursor_pos = vim.fn.getpos(".") -- 记录光标位置
 
   if ft == "tex" or ft == "markdown" then
-    -- 修复一些上游的问题: autoformat 插件会在最后一行多加一个空行，需要额外删除
     vim.cmd("w")
     local view = vim.fn.winsaveview()
     vim.api.nvim_buf_set_lines(0, -2, -1, false, {})

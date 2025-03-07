@@ -11,11 +11,25 @@ let g:vimtex_view_method = 'skim'
 " let g:vimtex_view_enabled = 0
 let g:vimtex_quickfix_mode=0
 let g:vimtex_fold_enabled=0
-let g:tex_conceal='abdmg'
+set conceallevel=2
+let g:tex_conceal="abdgm"
+let g:vimtex_syntax_custom_cmds = [
+          \ {'name': 'exp', 'mathmode': 1, 'concealchar': 'exp'}, 
+          \]
 let g:vimtex_syntax_custom_cmds_with_concealed_delims = [
           \ {'name': 'ket',
           \  'mathmode': 1,
           \  'cchar_open': '|',
+          \  'cchar_close': '>'},
+          \ {'name': 'bra',
+          \  'mathmode': 1,
+          \  'cchar_open': '<',
+          \  'cchar_close': '|'},
+          \ {'name': 'braket',
+          \  'nargs': 2,
+          \  'mathmode': 1,
+          \  'cchar_open': '<',
+          \  'cchar_mid': '|',
           \  'cchar_close': '>'},
           \ {'name': 'binom',
           \  'nargs': 2,
